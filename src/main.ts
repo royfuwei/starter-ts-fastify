@@ -10,12 +10,14 @@
 // import 'module-alias/register';
 import { getDemoValue } from '@/utils';
 import { configs } from '@/configs';
+import { server } from './servers';
 
 const main = async () => {
   const demoValue = getDemoValue();
   console.log(`APP_NAME: ${configs.name}`);
   console.log(`NODE_ENV: ${configs.env}`);
   console.log(`${demoValue}!!`);
+  await server();
   await new Promise((resolve) => setTimeout(resolve, 5000));
   console.log('Hello, World!');
 
