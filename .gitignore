@@ -413,3 +413,5 @@ test-results*
 
 docs/.vitepress/dist
 docs/.vitepress/cache
+
+.ref/*
