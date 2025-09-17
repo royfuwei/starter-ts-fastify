@@ -1,48 +1,73 @@
 /**
- * module-alias/register is used to register the module alias in the project.
- * This is used to avoid the relative path hell in the project.
- * For example, instead of using `import DemoUtils from '../../../utils/demo.utils';`,
- * we can use `import DemoUtils from '@/utils/demo.utils';`.
- * The module alias is defined in the tsconfig.json file.
- *
- * For tsc build, we need to use the `tsc-alias` package to resolve the module alias.
+ * Fastify 應用程式入口點
+ * 負責啟動伺服器和處理程序生命週期
  */
-// import 'module-alias/register';
-import { getDemoValue } from '@/utils';
-import { configs } from '@/configs';
-import { server } from './servers';
+import 'reflect-metadata';
+import { startServer, shutdownServer } from './server/server';
+import { config } from './config/config';
+import { AppContainer } from './common/container/container';
 
 const main = async () => {
-  const demoValue = getDemoValue();
-  console.log(`APP_NAME: ${configs.name}`);
-  console.log(`NODE_ENV: ${configs.env}`);
-  console.log(`${demoValue}!!`);
-  await server();
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-  console.log('Hello, World!');
+  console.log(`Starting ${config.name}...`);
+  console.log(`Environment: ${config.env}`);
+  console.log(`Server will listen on: ${config.server.host}:${config.server.port}`);
 
-  const closeProcesses = (code = 1) => {
-    process.exit(code);
+  let app;
+  try {
+    // 初始化 DI 容器
+    await AppContainer.initialize();
+
+    // 啟動 Fastify 伺服器
+    app = await startServer();
+
+    console.log('🚀 Server started successfully!');
+    console.log('📡 Available endpoints:');
+    console.log(`   GET  http://${config.server.host}:${config.server.port}/health`);
+    console.log(
+      `   GET  http://${config.server.host}:${config.server.port}/health/detailed`,
+    );
+    console.log(
+      `   GET  http://${config.server.host}:${config.server.port}/health/ready`,
+    );
+    console.log(`   GET  http://${config.server.host}:${config.server.port}/health/live`);
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+
+  // 優雅關閉處理器
+  const gracefulShutdown = async (signal: string) => {
+    console.log(`\n📡 ${signal} received`);
+
+    if (app) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      await shutdownServer(app);
+    }
+
+    console.log('✅ Application shutdown complete');
+    process.exit(0);
   };
 
-  const successHandler = () => {
-    console.info('');
-    console.info('SIGTERM received');
-    closeProcesses(0);
+  // 錯誤處理器
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const errorHandler = (error: any) => {
+    console.error('❌ Uncaught Exception:', error);
+
+    if (app) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      shutdownServer(app)
+        .then(() => process.exit(1))
+        .catch(() => process.exit(1));
+    } else {
+      process.exit(1);
+    }
   };
 
-  const failureHandler = (error: any) => {
-    console.info('');
-    console.error('Uncaught Exception');
-    console.error(error);
-    closeProcesses(1);
-  };
-
-  process.on('uncaughtException', failureHandler);
-  process.on('unhandledRejection', failureHandler);
-
-  process.on('SIGTERM', successHandler);
-  process.on('SIGINT', successHandler);
+  // 註冊程序事件處理器
+  process.on('SIGTERM', () => void gracefulShutdown('SIGTERM'));
+  process.on('SIGINT', () => void gracefulShutdown('SIGINT'));
+  process.on('uncaughtException', errorHandler);
+  process.on('unhandledRejection', errorHandler);
 };
 
 main().catch(console.error);
