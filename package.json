@@ -83,6 +83,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@types/dotenv-flow": "^3.3.3",
     "@types/jest": "^29.5.14",
+    "@types/node": "^24.5.2",
     "@types/supertest": "^6.0.2",
     "@vitest/coverage-istanbul": "^3.2.3",
     "@vitest/ui": "^3.2.3",
@@ -114,6 +115,8 @@
   "dependencies": {
     "dotenv-flow": "^4.1.0",
     "fastify": "^5.4.0",
-    "module-alias": "^2.2.3"
+    "module-alias": "^2.2.3",
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.10.0"
   }
 }
