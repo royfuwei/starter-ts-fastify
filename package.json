@@ -112,8 +112,12 @@
     "vitest": "^3.2.3"
   },
   "dependencies": {
+    "@fastify/swagger": "^9.5.1",
+    "@fastify/swagger-ui": "^5.2.3",
     "dotenv-flow": "^4.1.0",
     "fastify": "^5.4.0",
-    "module-alias": "^2.2.3"
+    "module-alias": "^2.2.3",
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.10.0"
   }
 }
