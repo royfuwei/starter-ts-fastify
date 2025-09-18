@@ -6,7 +6,7 @@
   - 建立基礎的 TypeScript 類型定義檔案
   - _Requirements: 7.1, 7.2, 7.3, 7.4_
 
-- [ ] 2. 實作依賴注入系統
+- [x] 2. 實作依賴注入系統
   - 建立 tsyringe DI 容器的適配器 (ioc/iocAdapter.ts)
   - 實作基礎的服務註冊器 (ioc/ioc.register.app.ts)
   - 建立 DI 相關的工具類別和介面
