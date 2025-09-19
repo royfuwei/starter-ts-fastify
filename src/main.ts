@@ -8,41 +8,30 @@
  * For tsc build, we need to use the `tsc-alias` package to resolve the module alias.
  */
 // import 'module-alias/register';
+import 'reflect-metadata';
 import { getDemoValue } from '@/utils';
 import { configs } from '@/configs';
-import { server } from './servers';
+import { FastifyServerManager } from './servers/server';
 
 const main = async () => {
   const demoValue = getDemoValue();
   console.log(`APP_NAME: ${configs.name}`);
   console.log(`NODE_ENV: ${configs.env}`);
   console.log(`${demoValue}!!`);
-  await server();
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-  console.log('Hello, World!');
 
-  const closeProcesses = (code = 1) => {
-    process.exit(code);
-  };
+  // 建立並啟動伺服器
+  const serverManager = new FastifyServerManager({
+    controllers: [],
+    middlewares: [],
+    isApiDocEnabled: true,
+  });
 
-  const successHandler = () => {
-    console.info('');
-    console.info('SIGTERM received');
-    closeProcesses(0);
-  };
-
-  const failureHandler = (error: any) => {
-    console.info('');
-    console.error('Uncaught Exception');
-    console.error(error);
-    closeProcesses(1);
-  };
-
-  process.on('uncaughtException', failureHandler);
-  process.on('unhandledRejection', failureHandler);
-
-  process.on('SIGTERM', successHandler);
-  process.on('SIGINT', successHandler);
+  try {
+    await serverManager.start();
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
 };
 
 main().catch(console.error);

@@ -100,6 +100,7 @@
     "jest-html-reporter": "^4.0.1",
     "jest-junit": "^16.0.0",
     "lint-staged": "^15.4.3",
+    "pino-pretty": "^13.1.1",
     "prettier": "^3.5.1",
     "rimraf": "^6.0.1",
     "rollup": "^4.36.0",
@@ -113,6 +114,10 @@
     "vitest": "^3.2.3"
   },
   "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "@fastify/formbody": "^8.0.2",
+    "@fastify/multipart": "^9.2.1",
+    "@fastify/sensible": "^6.0.3",
     "dotenv-flow": "^4.1.0",
     "fastify": "^5.4.0",
     "module-alias": "^2.2.3",
