@@ -1,0 +1,94 @@
+{
+  "name": "starter-ts-fastify",
+  "version": "0.0.0",
+  "description": "A project created by starter-ts-app",
+  "scripts": {
+    "clean": "npx rimraf ./dist",
+    "build": "npm run build:esbuild",
+    "dev": "npm run dev:esbuild",
+    "dev:esbuild": "NODE_ENV=local npm run clean &&  npx npm-run-all --parallel build:esbuild:watch",
+    "dev:tsc": "NODE_ENV=local npm run clean &&  npm run build:tsc:watch -- --onSuccess \"npm start\"",
+    "start": "node dist/main.js",
+    "start:watch1": "npx nodemon dist/main.js",
+    "start:watch": "npx nodemon --ext js --exec \"node dist/main.js\"",
+    "start:tsc": "npx npm-run-all --parallel build:tsc start",
+    "build:esbuild": "npm run clean && node esbuild.build.mjs",
+    "build:esbuild:watch": "npm run clean && node esbuild.dev.mjs",
+    "build:tsc": "npm run clean && npx tsc -p tsconfig.build.json",
+    "build:tsc:watch": "npm run clean && npx tsc-watch -p tsconfig.app.json",
+    "tsc": "npm run tsc:esbuild",
+    "tsc:esbuild": "npx tsc --noEmit --project tsconfig.esbuild.json",
+    "tsc:app": "npx tsc --noEmit --project tsconfig.app.json",
+    "lint-staged": "npx lint-staged",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "npm run vitest:run",
+    "test:e2e": "npm run vitest:e2e:run",
+    "vitest": "vitest --passWithNoTests",
+    "vitest:run": "vitest --passWithNoTests --run",
+    "vitest:ui": "vitest --passWithNoTests --ui",
+    "vitest:e2e": "vitest --config vitest.config.e2e.mts --passWithNoTests",
+    "vitest:e2e:run": "vitest --config vitest.config.e2e.mts --passWithNoTests --run",
+    "vitest:e2e:ui": "vitest --config vitest.config.e2e.mts --passWithNoTests --ui",
+    "release": "npx standard-version",
+    "release:patch": "npx standard-version --release-as patch",
+    "release:minor": "npx standard-version --release-as minor",
+    "release:major": "npx standard-version --release-as major",
+    "commit": "npx cz",
+    "prepare": "npx husky",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "_moduleAliases": {
+    "@": "./dist"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "vitest related --run",
+      "npx prettier --write",
+      "npx eslint --fix"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "keywords": [],
+  "author": "royfuwei",
+  "license": "ISC",
+  "packageManager": "pnpm@10.0.0+sha512.b8fef5494bd3fe4cbd4edabd0745df2ee5be3e4b0b8b08fa643aa3e4c6702ccc0f00d68fa8a8c9858a735a0032485a44990ed2810526c875e416f001b17df12b",
+  "devDependencies": {
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
+    "@commitlint/cz-commitlint": "^19.6.1",
+    "@eslint/js": "^9.20.0",
+    "@types/dotenv-flow": "^3.3.3",
+    "@types/supertest": "^6.0.2",
+    "@vitest/coverage-istanbul": "^3.2.3",
+    "@vitest/ui": "^3.2.3",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "esbuild": "^0.25.2",
+    "esbuild-plugin-tsc": "^0.5.0",
+    "eslint": "^9.20.1",
+    "eslint-config-prettier": "^10.0.1",
+    "fast-glob": "^3.3.3",
+    "husky": "^9.1.7",
+    "inquirer": "9",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.5.1",
+    "rimraf": "^6.0.1",
+    "supertest": "^7.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.0",
+    "vitepress": "^1.6.3",
+    "vitest": "^3.2.3"
+  },
+  "dependencies": {
+    "dotenv-flow": "^4.1.0",
+    "module-alias": "^2.2.3"
+  }
+}
