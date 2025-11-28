@@ -8,18 +8,29 @@
  * For tsc build, we need to use the `tsc-alias` package to resolve the module alias.
  */
 // import 'module-alias/register';
-import { getDemoValue } from '@/utils';
-import { configs } from '@/configs';
+import { FastifyServerManager, HttpRouteModule } from '@/infrastructures';
+import * as _indexHttpRouteModules from '@/delivery/http';
 
 const main = async () => {
-  const demoValue = getDemoValue();
-  console.log(`APP_NAME: ${configs.name}`);
-  console.log(`NODE_ENV: ${configs.env}`);
-  console.log(`${demoValue}!!`);
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-  console.log('Hello, World!');
+  const httpRouteModules = Object.values(
+    _indexHttpRouteModules,
+  ).values() as unknown as HttpRouteModule[];
 
-  const closeProcesses = (code = 1) => {
+  const serverManager = new FastifyServerManager({
+    httpRouteModules,
+  });
+
+  try {
+    await serverManager.start();
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  console.log('server started!');
+
+  /* const closeProcesses = (code = 1) => {
     process.exit(code);
   };
 
@@ -40,7 +51,7 @@ const main = async () => {
   process.on('unhandledRejection', failureHandler);
 
   process.on('SIGTERM', successHandler);
-  process.on('SIGINT', successHandler);
+  process.on('SIGINT', successHandler); */
 };
 
 main().catch(console.error);

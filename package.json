@@ -6,7 +6,7 @@
     "clean": "npx rimraf ./dist",
     "build": "npm run build:esbuild",
     "dev": "npm run dev:esbuild",
-    "dev:esbuild": "NODE_ENV=local npm run clean &&  npx npm-run-all --parallel build:esbuild:watch",
+    "dev:esbuild": "NODE_ENV=local npm run clean &&  npx npm-run-all --parallel build:esbuild:watch typecheck:watch",
     "dev:tsc": "NODE_ENV=local npm run clean &&  npm run build:tsc:watch -- --onSuccess \"npm start\"",
     "start": "node dist/main.js",
     "start:watch1": "npx nodemon dist/main.js",
@@ -38,7 +38,9 @@
     "prepare": "npx husky",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch"
   },
   "_moduleAliases": {
     "@": "./dist"
@@ -88,7 +90,16 @@
     "vitest": "^3.2.3"
   },
   "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "@fastify/formbody": "^8.0.2",
+    "@fastify/multipart": "^9.3.0",
+    "@fastify/sensible": "^6.0.3",
+    "@fastify/swagger": "^9.6.1",
+    "@fastify/swagger-ui": "^5.2.3",
     "dotenv-flow": "^4.1.0",
-    "module-alias": "^2.2.3"
+    "fastify": "^5.6.2",
+    "fastify-plugin": "^5.1.0",
+    "module-alias": "^2.2.3",
+    "pino-pretty": "^13.1.2"
   }
 }
