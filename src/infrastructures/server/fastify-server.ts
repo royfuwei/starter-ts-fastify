@@ -52,6 +52,7 @@ export class FastifyServerManager implements ServerManager<FastifyInstance> {
       this.isStarted = false;
       this.app.log.info('✅ Server shut down gracefully');
     } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       this.app.log.error(`❌ Error during server shutdown: ${err}`);
       throw err;
     }

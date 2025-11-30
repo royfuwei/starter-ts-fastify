@@ -6,6 +6,7 @@
     "clean": "npx rimraf ./dist",
     "build": "npm run build:esbuild",
     "dev": "npx cross-env NODE_OPTIONS=--enable-source-maps npm run dev:esbuild",
+    "dev:tsx": "npx cross-env NODE_ENV=local npx tsx watch src/main.ts",
     "dev:esbuild": "npx cross-env NODE_ENV=local npm run clean &&  npx npm-run-all --parallel build:esbuild:watch typecheck:watch",
     "dev:tsc": "npx cross-env NODE_ENV=local npm run clean &&  npm run build:tsc:watch -- --onSuccess \"npm start\"",
     "start": "npx cross-env NODE_OPTIONS=--enable-source-maps node dist/main.js",
