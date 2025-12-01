@@ -1,4 +1,4 @@
-ARG NODE_VERSION=22.12
+ARG NODE_VERSION=22.21
 ARG NODE_IMAGE_BUILD=node:${NODE_VERSION}
 ARG NODE_IMAGE=node:${NODE_VERSION}-slim
 
@@ -39,5 +39,6 @@ COPY --from=prod-deps /app/node_modules /app/node_modules
 COPY --from=build /app/dist /app/dist
 COPY --from=build /app/package.json /app
 EXPOSE 3000
+ENV NODE_OPTIONS=--enable-source-maps
 
 CMD [ "node", "dist/main.js" ]
